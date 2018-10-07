@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>node-express-socket.io</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>hello world!</h1>
+<ul id="list">
+
+</ul>
+<form action="">
+    <input type="text" id="val">
+    <button type="submit">发送</button>
+</form>
+<script>
+    //客户端监听服务器端口3000
+    var sock = io.connect('ws://localhost:3000/');
+    $("form").on('submit',function(){
+        var iptval = $(this).find('input');
+        //发送信息
+        sock.emit('chat.message',iptval.val());
+        iptval.val('');
+        return false;
+    });
+    //监听服务器返回
+    sock.on('chat.message',function(str){
+        $("#list").append('<li>'+str+'</li>');
+    })
+</script>
+</body>
+</html>
